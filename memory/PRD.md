@@ -23,6 +23,12 @@ Personal portfolio · Mix of everything (film/social/commercial) · Sections: He
 - Portfolio videos use public sample MP4s (Google demo bucket) as placeholders for real reels.
 - OWNER_EMAIL is `delivered@resend.dev` (test placeholder) — must be swapped for the owner's real inbox.
 
+## Implemented (2026-08-06 · update)
+- Emergent object storage integration (`storage.py`): init/put/get with app-name prefixing and key auto-recovery.
+- Backend: `POST /api/upload` (kind=image|video), `GET /api/files/{path}` (public serve with HTTP Range for video seeking), projects CRUD (`GET/POST /api/projects`, soft-delete `DELETE /api/projects/{id}`), default 6 projects seeded on startup.
+- Frontend: Work grid now fetches `/api/projects` (falls back to static defaults). New `/studio` admin page to upload poster+video to storage and publish/delete projects. Media URLs resolved via `lib/media.js`.
+- Verified end-to-end via curl (init, upload, serve 200/image-png, create, delete) + Studio screenshot.
+
 ## Backlog
 - P1: real showreel/video uploads (object storage), replace sample MP4s.
 - P1: set real owner email + real project details/copy.
