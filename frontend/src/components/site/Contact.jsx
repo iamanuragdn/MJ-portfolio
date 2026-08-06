@@ -32,8 +32,9 @@ export const Contact = () => {
     }
   };
 
+  const CONTACT_EMAIL = "debnathmanjoy@gmail.com";
   const copyEmail = () => {
-    navigator.clipboard.writeText("hello@kademercer.com");
+    navigator.clipboard.writeText(CONTACT_EMAIL);
     toast.success("Email copied to clipboard");
   };
 
@@ -51,34 +52,42 @@ export const Contact = () => {
           </p>
 
           <div className="mt-12 space-y-8">
-            <button
-              onClick={copyEmail}
-              data-testid="copy-email"
-              className="group flex items-center gap-3 text-left"
-            >
-              <div>
-                <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint">Email</div>
-                <div className="font-serif-e text-2xl md:text-3xl text-white group-hover:text-accent transition-colors">
-                  hello@kademercer.com
+            <div className="mt-6">
+              <button
+                onClick={copyEmail}
+                data-testid="copy-email"
+                className="group flex items-center gap-3 text-left"
+              >
+                <div>
+                  <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint">Email</div>
+                  <div className="font-serif-e text-2xl md:text-3xl text-white group-hover:text-accent transition-colors">
+                    {CONTACT_EMAIL}
+                  </div>
                 </div>
-              </div>
-              <Copy className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
-            </button>
+                <Copy className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
+              </button>
 
-            <div className="flex gap-12">
-              <div>
-                <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint">Studio</div>
-                <div className="text-white mt-1">Los Angeles, CA</div>
-              </div>
-              <div>
-                <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint">Socials</div>
-                <div className="flex gap-4 mt-1 font-monoE text-sm">
-                  {["IG", "VIMEO", "YT", "LN"].map((s) => (
-                    <a key={s} href="#contact" className="text-white hover:text-accent transition-colors">{s}</a>
-                  ))}
+              <div className="flex gap-12 mt-6">
+                <div>
+                  <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint">Based in</div>
+                  <div className="text-white mt-1">Chandigarh, India</div>
+                  <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint mt-2">Available</div>
+                  <div className="text-white mt-1">Worldwide • Remote</div>
+                </div>
+                <div>
+                  <div className="font-monoE text-[10px] uppercase tracking-[0.2em] text-faint">Socials</div>
+                  <div className="flex flex-col gap-1 mt-1 font-monoE text-sm">
+                    <div className="flex gap-4 mt-1">
+                      <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-white hover:text-accent transition-colors">Instagram</a>
+                      <a href="https://youtube.com" target="_blank" rel="noreferrer" className="text-white hover:text-accent transition-colors">YouTube</a>
+                      <a href="https://discordapp.com/users/1066298444102238208" target="_blank" rel="noreferrer" className="text-white hover:text-accent transition-colors">Discord</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+
+            
           </div>
         </div>
 
@@ -91,7 +100,7 @@ export const Contact = () => {
                 data-testid="contact-name"
                 value={form.name}
                 onChange={set("name")}
-                placeholder="Jane Director"
+                placeholder="Director"
                 className="bg-transparent border-b border-white/20 rounded-none py-3 text-white placeholder:text-faint focus:border-signal focus:outline-none transition-colors"
               />
             </div>

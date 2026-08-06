@@ -27,9 +27,9 @@ export const Hero = ({ onShowreel }) => {
         style={{ opacity }}
         className="absolute top-20 md:top-28 left-4 md:left-12 right-4 md:right-12 flex justify-between font-monoE text-[10px] md:text-xs uppercase tracking-[0.25em] text-ghost"
       >
-        <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-signal rec-dot" /> Rec · Editing since 2014</span>
-        <span className="hidden sm:block">Based in Los Angeles</span>
-        <span>Film / Commercial / Social</span>
+        <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-signal rec-dot" /> Rec · Editing since 2025</span>
+        <span className="hidden sm:block">Just a guy learning something new</span>
+        <span>editing / vlog / reels</span>
       </motion.div>
 
       {/* Kinetic headline */}

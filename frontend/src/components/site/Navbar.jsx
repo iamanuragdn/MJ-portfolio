@@ -31,7 +31,7 @@ export const Navbar = () => {
       <nav className="flex items-center justify-between px-4 md:px-12 h-16 md:h-20">
         <a href="#top" data-testid="nav-logo" className="flex items-center gap-2 group">
           <span className="w-2 h-2 rounded-full bg-signal rec-dot" />
-          <span className="font-display text-2xl md:text-3xl tracking-wide leading-none">KADE MERCER</span>
+          <span className="font-display text-2xl md:text-3xl tracking-wide leading-none">MANJOY DEBNATH</span>
         </a>
 
         <div className="hidden md:flex items-center gap-10">

@@ -12,7 +12,10 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
-from storage import init_storage, put_object, get_object, build_path
+try:
+    from .storage import init_storage, put_object, get_object, build_path
+except ImportError:  # pragma: no cover - allows running server.py directly from backend/
+    from storage import init_storage, put_object, get_object, build_path
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -83,10 +86,10 @@ def _build_html(c: ContactCreate) -> str:
     <table width="100%" cellpadding="0" cellspacing="0" style="background:#050505;padding:32px 0;font-family:Arial,Helvetica,sans-serif;">
       <tr><td align="center">
         <table width="560" cellpadding="0" cellspacing="0" style="background:#0f0f0f;border:1px solid #222;">
-          <tr><td style="padding:28px 32px;border-bottom:2px solid #FF2A00;">
-            <div style="color:#FF2A00;font-size:12px;letter-spacing:3px;text-transform:uppercase;">New Enquiry</div>
-            <div style="color:#ffffff;font-size:26px;font-weight:bold;margin-top:6px;">Kade Mercer / Studio</div>
-          </td></tr>
+        <tr><td style="padding:28px 32px;border-bottom:2px solid #FF2A00;">
+                        <div style="color:#FF2A00;font-size:12px;letter-spacing:3px;text-transform:uppercase;">New Enquiry</div>
+                        <div style="color:#ffffff;font-size:26px;font-weight:bold;margin-top:6px;">Manjoy Debnath / Studio</div>
+                    </td></tr>
           <tr><td style="padding:28px 32px;color:#e5e5e5;font-size:15px;line-height:1.7;">
             <p style="margin:0 0 8px;"><strong style="color:#888;">Name:</strong> {c.name}</p>
             <p style="margin:0 0 8px;"><strong style="color:#888;">Email:</strong> {c.email}</p>

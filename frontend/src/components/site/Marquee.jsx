@@ -1,6 +1,17 @@
 import { motion } from "framer-motion";
 
-const WORDS = ["Storytelling", "Color Grading", "Sound Design", "Motion", "Pacing", "Retiming", "VFX Cleanup"];
+const WORDS = [
+  "Storytelling",
+  "Reels",
+  "Shorts",
+  "Gaming",
+  "Vlogs",
+  "Mvs",
+  "Cinematics",
+  "Pacing",
+  "Retiming",
+  "Keyframing",
+];
 
 export const Marquee = () => {
   const loop = [...WORDS, ...WORDS];

@@ -46,7 +46,7 @@ export const Home = () => {
                 Close <X className="w-4 h-4" />
               </button>
               <video src={SHOWREEL} controls autoPlay playsInline className="w-full aspect-video bg-black border border-white/10" />
-              <p className="mt-4 font-monoE text-xs uppercase tracking-[0.2em] text-ghost">Showreel 2025 · Kade Mercer</p>
+              <p className="mt-4 font-monoE text-xs uppercase tracking-[0.2em] text-ghost">Showreel 2025 · Manjoy Debnath</p>
             </motion.div>
           </motion.div>
         )}

@@ -1,30 +1,31 @@
 import { useRef } from "react";
+import portrait from "../../images/portrait.jpg";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Reveal } from "../../lib/kinetic";
+// import portraitImg from '../images/portrait.jpg';
 
 const CHAPTERS = [
   {
     n: "01",
-    title: "The story leads, the tools follow",
-    body: "Software is just a scalpel. Before I touch a timeline I find the emotional spine of the footage — the single frame everything else should serve.",
+    title: "CINEMATIC IS A FEELING, NOT A FILTER",
+    body: "Mood is built through pacing, light, sound, and color—not just LUTs.",
   },
   {
     n: "02",
-    title: "Rhythm is invisible, felt not seen",
-    body: "A cut lands when the audience never notices it. I obsess over pacing, breath and negative space so the edit disappears and the feeling stays.",
+    title: "EVERY REEL DESERVES A REASON TO EXIST",
+    body: "Whether it's 15 seconds or 5 minutes, every edit should leave the audience with something.",
   },
   {
     n: "03",
-    title: "Color is a second script",
-    body: "Grade is not a filter. It's mood, time of day, memory. I build looks that carry meaning from the first frame to the last.",
+    title: "STORY COMES BEFORE STYLE",
+    body: "Transitions impress for a moment. Stories stay with people long after the screen goes dark.",
   },
 ];
 
 const STATS = [
-  { k: "10+", v: "Years editing" },
-  { k: "420", v: "Projects delivered" },
-  { k: "38M", v: "Views driven" },
-  { k: "17", v: "Festival selections" },
+  { k: "2+", v: "Years editing" },
+  { k: "20", v: "Reels / shots" },
+  { k: "30k", v: "Views driven" },
 ];
 
 export const About = () => {
@@ -39,15 +40,15 @@ export const About = () => {
           {/* portrait */}
           <div className="md:col-span-5 relative overflow-hidden">
             <div className="overflow-hidden">
-              <motion.img
-                style={{ y }}
-                src="https://images.pexels.com/photos/31922581/pexels-photo-31922581.jpeg"
-                alt="Kade Mercer"
-                className="w-full aspect-[3/4] object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110"
-              />
+                  <motion.img
+                    style={{ y, objectPosition: "30% 50%" }}
+                    src={portrait}
+                    alt="Manjoy Debnath"
+                    className="w-full aspect-[3/4] object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110"
+                  />
             </div>
             <div className="flex items-center justify-between mt-4 font-monoE text-[10px] uppercase tracking-[0.2em] text-ghost">
-              <span>Kade Mercer</span>
+              <span>Manjoy Debnath</span>
               <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-signal rec-dot" /> On set, 2025</span>
             </div>
           </div>
@@ -57,17 +58,15 @@ export const About = () => {
             <span className="font-monoE text-xs uppercase tracking-[0.3em] text-signal">02 — About</span>
             <Reveal>
               <h2 className="font-serif-e text-3xl md:text-5xl leading-tight text-white mt-5">
-                I'm Kade — an editor who believes the best cut is the one you feel but never see.
+                I'm MJ — I don't chase perfect edits. I chase the feeling people remember after the screen goes black.
               </h2>
             </Reveal>
             <p className="text-ghost text-base leading-relaxed mt-6 max-w-xl">
-              For over a decade I've cut everything from festival shorts and music videos to global brand films and
-              scroll-stopping social. My work sits at the intersection of craft and instinct — technical enough to
-              deliver, emotional enough to matter.
+              For me, editing isn't about adding effects—it's about finding the emotion hidden inside the footage. Through thoughtful pacing, color, and storytelling, I craft vlogs, cinematic reels, music videos, and films that connect long after the final frame.
             </p>
 
             {/* stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 border border-white/10 mt-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-px bg-white/10 border border-white/10 mt-10">
               {STATS.map((s) => (
                 <div key={s.v} className="bg-inkalt p-5 md:p-6">
                   <div className="font-display text-4xl md:text-5xl text-white leading-none">{s.k}</div>
@@ -84,11 +83,11 @@ export const About = () => {
           <div className="mt-8 divide-y divide-white/10 border-t border-white/10">
             {CHAPTERS.map((c) => (
               <Reveal key={c.n}>
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-12 py-10 md:py-14 group">
-                  <div className="md:col-span-3 font-serif-e text-6xl md:text-8xl text-faint group-hover:text-accent transition-colors duration-500 leading-none">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-12 py-10 md:py-14 group items-center">
+                  <div className="md:col-span-3 font-serif-e text-6xl md:text-8xl text-faint group-hover:text-accent transition-colors duration-500 leading-none flex items-center justify-center md:justify-start">
                     {c.n}
                   </div>
-                  <h3 className="md:col-span-5 font-display text-3xl md:text-5xl uppercase tracking-tight leading-none text-white">
+                  <h3 className="md:col-span-5 font-display text-3xl md:text-5xl uppercase tracking-tight leading-none text-white self-center">
                     {c.title}
                   </h3>
                   <p className="md:col-span-4 text-ghost text-sm leading-relaxed self-center">{c.body}</p>
