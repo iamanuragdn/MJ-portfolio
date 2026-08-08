@@ -1,16 +1,35 @@
 services:
+  # ── Backend API ──────────────────────────────────────────────────────────────
   - type: web
     name: mj-portfolio-api
     env: python
+    runtime: python
+    pythonVersion: "3.11.0"
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
     plan: free
     healthCheckPath: /api/
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.9.6
       - key: DB_NAME
         value: MJ-Portfolio
       - key: CORS_ORIGINS
-        value: https://your-vercel-app.vercel.app
+        value: https://mj-portfolio.vercel.app
+      # Set these in Render Dashboard → Environment (don't commit secrets):
+      # MONGO_URL, EMERGENT_EMAIL_KEY, EMERGENT_LLM_KEY, OWNER_EMAIL, EMAIL_FROM_NAME
+
+  # ── Frontend Static Site ──────────────────────────────────────────────────────
+  - type: web
+    name: mj-portfolio-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: yarn install && yarn build
+    staticPublishPath: build
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        value: https://mj-portfolio-api.onrender.com

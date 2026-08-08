@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Header, Request
 from fastapi.responses import Response, StreamingResponse
 from dotenv import load_dotenv
@@ -28,11 +29,45 @@ db_available = False
 memory_projects: List[dict] = []
 memory_contacts: List[dict] = []
 
-app = FastAPI()
-api_router = APIRouter(prefix="/api")
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    """Modern lifespan handler (replaces deprecated on_event startup/shutdown)."""
+    global db_available
+    await _connect_db()
+    try:
+        init_storage()
+        logger.info("Storage initialized")
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
+
+    if db_available:
+        try:
+            count = await db.projects.count_documents({})
+            if count == 0:
+                seeds = [project.model_dump() for project in _default_project_payload()]
+                await db.projects.insert_many(seeds)
+                logger.info(f"Seeded {len(seeds)} default projects")
+        except Exception as exc:
+            logger.error(f"MongoDB became unavailable during startup checks: {exc}")
+            memory_projects[:] = _default_project_payload()
+            memory_contacts[:] = []
+            db_available = False
+    else:
+        memory_projects[:] = _default_project_payload()
+        logger.info("Database unavailable at startup; using default project payloads")
+
+    yield  # app runs here
+
+    if client is not None:
+        client.close()
+
+
+app = FastAPI(lifespan=lifespan)
+api_router = APIRouter(prefix="/api")
 
 EMAIL_BASE_URL = os.environ.get("EMAIL_BASE_URL", "https://integrations.emergentagent.com")
 EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "")
@@ -138,6 +173,13 @@ def _build_html(c: ContactCreate) -> str:
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/")
+async def app_root():
+    """Root health-check — used by Render and uptime monitors."""
+    return {"status": "ok", "service": "MJ-Portfolio API", "version": "1.0.0"}
+
 
 
 # ---------- Contact ----------
@@ -282,34 +324,4 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
-async def startup():
-    global db_available
-    await _connect_db()
-    try:
-        init_storage()
-        logger.info("Storage initialized")
-    except Exception as e:
-        logger.error(f"Storage init failed: {e}")
-
-    if db_available:
-        try:
-            count = await db.projects.count_documents({})
-            if count == 0:
-                seeds = [project.model_dump() for project in _default_project_payload()]
-                await db.projects.insert_many(seeds)
-                logger.info(f"Seeded {len(seeds)} default projects")
-        except Exception as exc:
-            logger.error(f"MongoDB became unavailable during startup checks: {exc}")
-            memory_projects[:] = _default_project_payload()
-            memory_contacts[:] = []
-            db_available = False
-    else:
-        memory_projects[:] = _default_project_payload()
-        logger.info("Database unavailable at startup; using default project payloads")
-
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    if client is not None:
-        client.close()
+# Startup and shutdown are handled by the lifespan context manager above.
