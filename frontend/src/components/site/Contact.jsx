@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { ArrowRight, Loader2, Copy } from "lucide-react";
 import { Reveal } from "../../lib/kinetic";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"}/api`;
 
 const TYPES = ["Short Film", "Music Video", "Commercial", "Social / Reels", "Docu-Series", "Other"];
 
