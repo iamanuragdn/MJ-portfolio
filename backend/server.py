@@ -178,9 +178,9 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def app_root():
-    """Root health-check — used by Render and uptime monitors."""
+    """Root health-check — used by Render and uptime monitors (GET + HEAD)."""
     return {"status": "ok", "service": "MJ-Portfolio API", "version": "1.0.0"}
 
 
