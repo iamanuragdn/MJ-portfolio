@@ -33,42 +33,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(application: FastAPI):
-    """Modern lifespan handler (replaces deprecated on_event startup/shutdown)."""
-    global db_available
-    await _connect_db()
-    try:
-        init_storage()
-        logger.info("Storage initialized")
-    except Exception as e:
-        logger.error(f"Storage init failed: {e}")
-
-    if db_available:
-        try:
-            count = await db.projects.count_documents({})
-            if count == 0:
-                seeds = [project.model_dump() for project in _default_project_payload()]
-                await db.projects.insert_many(seeds)
-                logger.info(f"Seeded {len(seeds)} default projects")
-        except Exception as exc:
-            logger.error(f"MongoDB became unavailable during startup checks: {exc}")
-            memory_projects[:] = _default_project_payload()
-            memory_contacts[:] = []
-            db_available = False
-    else:
-        memory_projects[:] = _default_project_payload()
-        logger.info("Database unavailable at startup; using default project payloads")
-
-    yield  # app runs here
-
-    if client is not None:
-        client.close()
-
-
-app = FastAPI(lifespan=lifespan)
-api_router = APIRouter(prefix="/api")
-
 EMAIL_BASE_URL = os.environ.get("EMAIL_BASE_URL", "https://integrations.emergentagent.com")
 EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "Portfolio Contact")
@@ -146,6 +110,45 @@ async def _connect_db() -> None:
 
 def _default_project_payload() -> List[Project]:
     return [Project(**p) for p in DEFAULT_PROJECTS]
+
+
+# ── App bootstrap (placed here so lifespan can reference helpers defined above) ──
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    """Handles startup and shutdown. Defined after helpers to satisfy linter."""
+    global db_available
+    await _connect_db()
+    try:
+        init_storage()
+        logger.info("Storage initialized")
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
+
+    if db_available:
+        try:
+            count = await db.projects.count_documents({})
+            if count == 0:
+                seeds = [project.model_dump() for project in _default_project_payload()]
+                await db.projects.insert_many(seeds)
+                logger.info(f"Seeded {len(seeds)} default projects")
+        except Exception as exc:
+            logger.error(f"MongoDB became unavailable during startup checks: {exc}")
+            memory_projects[:] = _default_project_payload()
+            memory_contacts[:] = []
+            db_available = False
+    else:
+        memory_projects[:] = _default_project_payload()
+        logger.info("Database unavailable at startup; using default project payloads")
+
+    yield  # app is live here
+
+    if client is not None:
+        client.close()
+
+
+app = FastAPI(lifespan=lifespan)
+api_router = APIRouter(prefix="/api")
+
 
 
 def _build_html(c: ContactCreate) -> str:
